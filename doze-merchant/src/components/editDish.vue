@@ -1,0 +1,98 @@
+<template>
+  <div>
+    <!--表单结构-->
+    <el-form>
+      <el-form-item label="菜名">
+        <el-input v-model="data.cookName"></el-input>
+      </el-form-item>
+      <el-form-item label="价钱">
+        <el-input v-model="data.price"></el-input>
+      </el-form-item>
+      <el-form-item label="设为本店招牌">
+        <el-switch v-model="isGood"></el-switch>
+      </el-form-item>
+      <el-form-item label="设为启用">
+        <el-switch v-model="isSell"></el-switch>
+      </el-form-item>
+      <el-form-item label="菜品标签">
+
+      </el-form-item>
+      <el-form-item label="图片">
+
+      </el-form-item>
+    </el-form>
+    <!--表单操作-->
+    <div>
+      <el-button type="success" @click="sub">提交</el-button>
+      <el-button type="danger" @click="quit">退出</el-button>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import {defineComponent, onBeforeUnmount, onMounted, ref, Ref, watch} from "vue";
+import dozis from "@/dozis/dozis";
+import Dozurl from "@/dozis/dozurl";
+import {ElMessage} from "element-plus/es";
+
+export default defineComponent({
+  name: "editDish",
+  props: ["data","isEdit"],
+  setup(props, context) {
+    let data: Ref<CookBook> = ref({...props.data});
+
+    //布尔类型值的转换
+    let isGood: Ref<boolean> = ref(false);
+    let isSell: Ref<boolean> = ref(false);
+
+    //操作
+    const sub = () => {
+      isGood.value ? data.value.isGood="1" : data.value.isGood="0";
+      isSell.value ? data.value.isSell="1" : data.value.isSell="0";
+      dozis.post(Dozurl.updateCookBook, data.value, "请求失败，请检查网络!").then(res =>{
+        ElMessage({
+          type: "success",
+          message: "提交成功!"
+        });
+        context.emit("updateFlag");
+        context.emit("closeEdit");
+      })
+    }
+
+    const quit = () => {
+      context.emit("closeEdit");
+    }
+
+    watch(
+        (): CookBook => props.data,
+        (val): void => {
+          data.value = {...val};
+          isGood.value = data.value.isGood==="1";
+          isSell.value = data.value.isSell==="1";
+        },
+        {deep: true,immediate: true}
+    )
+    watch(
+        (): boolean => props.isEdit,
+        (val): void => {
+          if (!val) {
+            console.log("推出");
+            data.value = {...props.data};
+            isGood.value = data.value.isGood==="1";
+            isSell.value = data.value.isSell==="1";
+          }
+        },
+        {deep: true,immediate: true}
+    )
+
+    return {
+      isGood,isSell,data,
+      sub,quit,
+    }
+  }
+});
+</script>
+
+<style scoped>
+
+</style>

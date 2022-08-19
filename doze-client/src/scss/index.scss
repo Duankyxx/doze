@@ -1,0 +1,35 @@
+//基本颜色声明
+$my-black: #1f1f1f;
+$my-grid: #3f3f3f;
+$my-white: #f1f1f1;
+$my-gray: #ccc;
+$my-blue: #409EFF;
+$my-cent: 0 auto;
+$my-fontSize: 25px;
+$my-fontSize_18: 18px;
+$my-fontSize_14: 14px;
+//圆角设计
+$my-round_12: 12px;
+$my-round_16: 16px;
+$my-round_50: 50px;
+//属性集合
+@mixin full-screen {
+  width: 100%;
+  height: 100vh;
+}
+@mixin logo {
+  width: 246px;
+  height: 100px;
+}
+@mixin cent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@mixin my-cont {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  background-color: $my-white;
+  border-radius: $my-round_12;
+  padding: 10px;
+}

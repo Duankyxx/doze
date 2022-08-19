@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.doze.mapper.DozeMapper">
+<!--    UserDetailed online(int userId);-->
+    <select id="online" resultType="com.doze.pojo.UserDetailed">
+        select * from doze.userdetailed where userId = #{userId}
+    </select>
+<!--    void newOrder(int isNewOrder);-->
+    <update id="newOrder">
+        update doze.userdetailed set isNewOrder = #{param1} where userId = #{param2}
+    </update>
+<!--    User login(String username,String password);-->
+    <select id="login" resultType="com.doze.pojo.User">
+        select * from doze.user where username = #{param1} and password = #{param2}
+    </select>
+<!--    List<Bar> getBar(String level);-->
+    <select id="getBar" resultType="com.doze.pojo.Bar">
+        select * from doze.tbBar where level = #{level}
+    </select>
+<!--    List<CookBook> getCookBook(int uid);-->
+    <select id="getCookBook" resultType="com.doze.pojo.CookBook">
+        select * from doze.tbCookBook where uid = #{uid}
+    </select>
+<!--    int addCookBook(CookBook cookBook)-->
+    <insert id="addCookBook">
+        insert into doze.tbCookBook (uid,cookName,cookPicture,price,isGood,isSell,cookLabel) values (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+    </insert>
+<!--    int updateCookBook(CookBook cookBook);-->
+    <update id="updateCookBook">
+        update doze.tbCookBook set cookName=#{param2},
+                                   cookPicture=#{param3},
+                                   price=#{param4},
+                                   isGood=#{param5},
+                                   isSell=#{param6},
+                                   cookLabel=#{param7} where id=#{param1}
+    </update>
+<!--    int removeCookBook(int id);-->
+    <delete id="removeCookBook">
+        delete from doze.tbCookBook where id = #{id}
+    </delete>
+<!--    List<Order> getOrder();-->
+    <select id="getOrder" resultType="com.doze.pojo.Order">
+        select * from doze.order where uid = #{uid}
+    </select>
+<!--    List<Receipt> getReceipt(int serialNumber);-->
+    <select id="getReceipt" resultType="com.doze.pojo.Receipt">
+        select * from doze.receipt where serialNumber = #{serialNumber}
+    </select>
+<!--    int generateOrder(int seatNumber, String time, String remarks, double payment, int uid);-->
+    <insert id="generateOrder">
+        insert into doze.order (seatNumber,time,remarks,payment,uid) values (#{param1},#{param2},#{param3},#{param4},#{param5})
+    </insert>
+<!--    int getOrderNumber(int seatNumber, String time, String remarks, double payment, int uid);-->
+    <select id="getOrderNumber" resultType="com.doze.pojo.Order">
+        select id from doze.order where seatNumber = #{param1} and time = #{param2} and remarks = #{param3} and payment=#{param4} and uid=#{param5}
+    </select>
+<!--    void generateReceipt(int serialNumber);-->
+    <insert id="generateReceipt">
+        insert into doze.receipt (CookName,quantity,price,serialNumber) values (#{param1},#{param2},#{param3},#{param4})
+    </insert>
+</mapper>
