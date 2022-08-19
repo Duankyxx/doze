@@ -108,7 +108,7 @@
 * java
 * springboot
 * mybatis
-##前端
+## 前端
 * vue3-cli
 * scss
 * typescript
