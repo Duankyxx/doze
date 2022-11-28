@@ -4,7 +4,7 @@
       <div>
         <!--我的表格-->
         <div>
-          <el-table :data="data">
+          <el-table :data="data" v-loading="loading">
             <el-table-column align="center" type="selection"></el-table-column>
             <el-table-column align="center" type="expand">
               <!--展开行-->
@@ -30,7 +30,7 @@
                   </table>
                   <!--信息-->
                   <h2 style="margin-bottom: 20px">菜单</h2>
-                  <el-table :data="props.row.receipts" :border="true" :show-summary="true" sum-text="合计">
+                  <el-table :data="props.row.receipts" :border="true" :show-summary="true" :summary-method="getSummaries" sum-text="合计">
                     <el-table-column align="center" label="名称" prop="cookName"></el-table-column>
                     <el-table-column align="center" label="数量" prop="quantity"></el-table-column>
                     <el-table-column align="center" label="单价" prop="price"></el-table-column>
@@ -43,7 +43,7 @@
             <el-table-column align="center" label="下单时间" prop="time"></el-table-column>
             <el-table-column align="center" label="确认">
               <template #default="scope">
-                <el-button type="success">订单完成</el-button>
+                <el-button type="success" @click="subOrder(scope.row)">订单完成</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, Ref} from "vue";
+import {defineComponent, onMounted, ref, Ref, watch} from "vue";
 import store from "@/store";
 import Order from "@/pojo/Order";
 import dozis from "@/dozis/dozis";
@@ -82,12 +82,54 @@ export default defineComponent({
           }
         ],
       }
-    ])
-    dozis.post(Dozurl.getOrder,{"id": store.state.user.id}).then((res: Order[]) => {
-      data.value = res;
+    ]);
+    //数据加载图层
+    let loading: Ref<boolean> = ref(false);
+    //获取数据
+    const getOrder = async () => {
+      loading.value = true;
+      data.value = await dozis.post(Dozurl.getOrder,{"id": store.state.user.id});
+      loading.value = false;
+    }
+
+
+    const subOrder = async (order: Order) => {
+      loading.value = true;
+      await dozis.post(Dozurl.subOrder, order);
+      await getOrder();
+    }
+
+    //合计
+    const getSummaries = (param: any) => {
+      const { columns, data } = param;
+      let sums: Array<string> = ["合计", "", ""];
+      let total: number = 0;
+      let totalMoney: number = 0;
+      data.forEach((i: any, index: number) => {
+        total += i.quantity;
+        totalMoney += i.quantity*i.price;
+      });
+      sums[1] = total+"";
+      sums[2] = totalMoney+"";
+      return sums;
+    }
+
+    watch(
+        () => store.state.refresh,
+        (value: boolean) => {
+          if (value) {
+            getOrder();
+            store.state.refresh = false;
+          }
+        }
+    )
+
+    onMounted(() => {
+      getOrder();
     })
     return {
-      data
+      data,loading,
+      subOrder,getOrder,getSummaries
     }
   }
 });
@@ -98,6 +140,7 @@ export default defineComponent({
 #contX {
   height: calc(100% - 10px);
   #cont {
+    //outline: 1px solid red;
     @include my-cont;
     overflow-y: auto;
 

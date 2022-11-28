@@ -18,7 +18,15 @@
 
       </el-form-item>
       <el-form-item label="图片">
-
+        <el-upload
+            class="avatar-uploader"
+            :multiple="false"
+            :before-upload="upload"
+            accept="image/jpeg"
+            :limit="1">
+          <img v-if="data.cookPicture" :src="data.cookPicture" alt="" class="avatar">
+          <el-icon v-else class="avatar-uploader-icon"><Plus></Plus></el-icon>
+        </el-upload>
       </el-form-item>
     </el-form>
     <!--表单操作-->
@@ -33,7 +41,8 @@
 import {defineComponent, onBeforeUnmount, onMounted, ref, Ref, watch} from "vue";
 import dozis from "@/dozis/dozis";
 import Dozurl from "@/dozis/dozurl";
-import {ElMessage} from "element-plus/es";
+import {ElMessage, UploadRawFile} from "element-plus/es";
+import {sendCookPicture} from "@/aliyun-oss/request";
 
 export default defineComponent({
   name: "editDish",
@@ -56,7 +65,17 @@ export default defineComponent({
         });
         context.emit("updateFlag");
         context.emit("closeEdit");
+        context.emit("getCookBook");
       })
+    }
+
+    //更新
+    //
+    const upload = async (file: UploadRawFile): Promise<boolean> => {
+      console.log(file);
+      data.value.cookPicture = await sendCookPicture(file)+"";
+      console.log(data.value);
+      return false;
     }
 
     const quit = () => {
@@ -87,12 +106,16 @@ export default defineComponent({
 
     return {
       isGood,isSell,data,
-      sub,quit,
+      sub,quit,upload
     }
   }
 });
 </script>
 
 <style scoped>
-
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>

@@ -1,6 +1,8 @@
 export default class Dozurl{
     //基本变量
-    static http: string = "http://127.0.0.1:8080";
+    //http://120.25.127.13:5080
+    //http://127.0.0.1:5080
+    static http: string = "http://127.0.0.1:5080";
 
     //链接
     static online: string = `${Dozurl.http}/doze_api/online`
@@ -11,7 +13,11 @@ export default class Dozurl{
     static updateCookBook: string = `${Dozurl.http}/doze_api/updateCookBook`; // 修改菜谱
     static removeCookBook: string = `${Dozurl.http}/doze_api/removeCookBook`; // 删除菜谱
     static getOrder: string = `${Dozurl.http}/doze_api/getOrder`; //获取订单
+    static getHistoryOrderOrder: string = `${Dozurl.http}/doze_api/getHistoryOrder`; //获取订单
+    static subOrder: string = `${Dozurl.http}/doze_api/subOrder`;   //提交订单
+    static getSTSToken: string = `${Dozurl.http}/doze_api/getSTS`; //获取Token
 
-    static Merchant: string = `http://127.0.0.1:3050`;
+
+    static Merchant: string = `http://120.25.127.13:3050`;
 
 }

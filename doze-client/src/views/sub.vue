@@ -113,7 +113,7 @@ export default defineComponent({
         uid: store.state.uid,
         receipts: receipts,
       }
-      axios.post("http://127.0.0.1:8080/doze_api/generateOrder",order).then(res => {
+      axios.post("http://120.25.127.13:5080/doze_api/generateOrder",order).then(res => {
         router.push("/wait");
       })
     }

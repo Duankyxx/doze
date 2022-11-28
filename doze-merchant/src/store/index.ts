@@ -14,7 +14,8 @@ export default createStore({
      *    响应式:
      *    sm:w>1080
      */
-    sm: false
+    sm: false,
+    refresh: false
   },
   getters: {
   },

@@ -51,10 +51,18 @@ import store from "@/store";
 export default defineComponent({
   name: "home",
   setup() {
+    //测试
+    // const GetRequest = () => {
+    //   let url = window.location.hash.split("?")[1]; //获取url中"?"符后的字串
+    //   console.log(url);
+    // }
+    // GetRequest();
+
     //获取桌号
     const getQueryString = (name: string) => {
       let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-      let r = window.location.search.substr(1).match(reg);
+      let search = window.location.hash.split("?")[1];
+      let r = search.match(reg);
       if(r!=null)return  unescape(r[2]); return null;
     }
     let Number = getQueryString("Number");
@@ -76,12 +84,12 @@ export default defineComponent({
       if(arr.length <2) {
         router.push("/notFound");
       }
-      let tableNumber = arr[0];
-      let uid = arr[1];
+      let tableNumber = arr[1];
+      let uid = arr[0];
       store.state.seatNumber = tableNumber;
       store.state.uid = uid;
       //获取菜单
-      axios.post("http://127.0.0.1:8080/doze_api/getCookBook",{
+      axios.post("http://120.25.127.13:5080/doze_api/getCookBook",{
         "id" : uid
       }).then((res) => {
         for (const element of res.data) {

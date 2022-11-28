@@ -26,7 +26,7 @@ export default defineComponent({
     //餐桌数量
     let number: Ref<number> = ref(1);
     //商家连接
-    let url = `${Dozurl.Merchant}home?Number=${store.state.user.id},`
+    let url = `${Dozurl.Merchant}/%23/home?Number=${store.state.user.id},`;
 
     //获取二维码
     let qr: Ref<Array<string>> = ref([]);

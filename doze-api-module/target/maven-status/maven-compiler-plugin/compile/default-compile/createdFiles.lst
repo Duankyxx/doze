@@ -5,8 +5,10 @@ com\doze\pojo\Bar.class
 com\doze\pojo\CookBook.class
 com\doze\controller\Doze.class
 com\doze\mapper\DozeMapper.class
+com\doze\lib\MyLog$LogThread.class
 com\doze\pojo\Receipt.class
 com\doze\pojo\UserDetailed.class
+com\doze\lib\MyLog.class
 com\doze\pojo\Level.class
 com\doze\pojo\User.class
 com\doze\controller\MyWebMvcConfig.class

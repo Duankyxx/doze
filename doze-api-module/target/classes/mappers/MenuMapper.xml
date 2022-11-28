@@ -44,6 +44,10 @@
     <select id="getOrder" resultType="com.doze.pojo.Order">
         select * from doze.order where uid = #{uid}
     </select>
+    <!--    List<Order> getHistoryOrder();-->
+    <select id="getHistoryOrder" resultType="com.doze.pojo.Order">
+        select * from doze.historyorder where uid = #{uid}
+    </select>
 <!--    List<Receipt> getReceipt(int serialNumber);-->
     <select id="getReceipt" resultType="com.doze.pojo.Receipt">
         select * from doze.receipt where serialNumber = #{serialNumber}
@@ -59,5 +63,15 @@
 <!--    void generateReceipt(int serialNumber);-->
     <insert id="generateReceipt">
         insert into doze.receipt (CookName,quantity,price,serialNumber) values (#{param1},#{param2},#{param3},#{param4})
+    </insert>
+
+    <!--    int deleteOrder(int id);-->
+    <delete id="deleteOrder">
+        delete from doze.order where id=#{param1}
+    </delete>
+
+    <!--       int intoHistoryOrder(Order order);-->
+    <insert id="intoHistoryOrder" parameterType="com.doze.pojo.Order">
+        insert into doze.historyorder (seatNumber, time, remarke, payment, uid) values (#{seatNumber}, #{time}, #{remarks}, #{payment}, #{uid});
     </insert>
 </mapper>

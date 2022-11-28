@@ -46,6 +46,8 @@ public interface DozeMapper {
     //商家获取订单
     List<Order> getOrder(int uid);
     List<Receipt> getReceipt(int serialNumber);
+    //获取历史订单
+    List<Order> getHistoryOrder(int uid);
 
     //存入order
     void generateOrder(int seatNumber, String time, String remarks, double payment, int uid);
@@ -53,4 +55,9 @@ public interface DozeMapper {
     Order getOrderNumber(int seatNumber, String time, String remarks, double payment, int uid);
     //存入receipt
     void generateReceipt(String CookName, int quantity, double price, int serialNumber);
+
+    //删除当前订单
+    void deleteOrder(int id);
+    //新增历史订单
+    void intoHistoryOrder(Order order);
 }

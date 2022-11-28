@@ -15,6 +15,7 @@ import dozis from "@/dozis/dozis";
 import Dozurl from "@/dozis/dozurl";
 import store from "@/store";
 import {ElMessage, ElNotification} from "element-plus";
+import orderManagement from "@/views/Fun/orderManagement.vue";
 
 export default defineComponent({
   name: "cloud",
@@ -23,7 +24,7 @@ export default defineComponent({
     CircleCheckFilled,
     CircleCloseFilled,
   },
-  setup() {
+  setup(props, context) {
     let isOnline: Ref<boolean> = ref(false);
     //监听
     watch(
@@ -52,6 +53,7 @@ export default defineComponent({
             message: '您有新的订单!请前往订单页面!!',
             duration: 0,
           })
+          store.state.refresh = true;
         }
       }).catch(() => {
         isOnline.value = false;

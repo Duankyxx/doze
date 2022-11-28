@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory, Router, RouteRecordRaw} from 'vue-router'
+import {createRouter, createWebHashHistory, Router, RouteRecordRaw} from 'vue-router'
 import store from "@/store";
 
 const routes: Array<RouteRecordRaw> = [
@@ -59,7 +59,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router: Router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(process.env.BASE_URL),
   routes
 })
 

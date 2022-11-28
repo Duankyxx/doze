@@ -3,11 +3,15 @@
     <div id="content" ref="cont">
       <!--我的表格-->
       <div id="tb">
-        <el-table :data="dataList" :height="het">
+        <el-table :data="dataList" :height="het" v-loading="loading">
           <el-table-column align="center" type="selection"></el-table-column>
           <el-table-column align="center" label="序号"></el-table-column>
           <el-table-column align="center" label="菜名" prop="cookName"></el-table-column>
-          <el-table-column align="center" label="图片" prop="cookPicture"></el-table-column>
+          <el-table-column align="center" label="图片" prop="cookPicture" width="150px">
+            <template #default="scope">
+              <img id="cookImg" :src="scope.row.cookPicture" alt="图片加载失败">
+            </template>
+          </el-table-column>
           <el-table-column align="center" label="价格" prop="price"></el-table-column>
           <el-table-column align="center" label="设为本店招牌" prop="isGood">
             <template #default="scope">
@@ -47,7 +51,7 @@
         :size="EditSize"
     >
       <!--编辑表单-->
-      <edit-dish :data="data" :is-edit="isEdit" @closeEdit="closeEdit" @updateFlag="updateFlag"></edit-dish>
+      <edit-dish :data="data" :is-edit="isEdit" @closeEdit="closeEdit" @updateFlag="updateFlag" @getCookBook="getCookBook"></edit-dish>
     </el-drawer>
 
     <!--添加-->
@@ -59,7 +63,7 @@
   >
     <el-dialog></el-dialog>
     <!--编辑表单-->
-    <add-dish @closeAdd="closeAdd" @updateFlag="updateFlag"></add-dish>
+    <add-dish @closeAdd="closeAdd" @updateFlag="updateFlag" @getCookBook="getCookBook"></add-dish>
   </el-drawer>
   </div>
 </template>
@@ -84,6 +88,8 @@ export default defineComponent({
   setup() {
     //添加
     let isAdd: Ref<boolean> = ref(false);
+    //数据加载图层
+    let loading: Ref<boolean> = ref(false);
     const addDish = (): void => {
       //修改title
       title.value = "添加一个新的菜";
@@ -169,14 +175,22 @@ export default defineComponent({
     })
 
     let dataList: Ref<CookBook[] | null> = ref(null);
-    //获取数据
-    dozis.post(Dozurl.getCookBook, store.state.user, "请求失败，请检查网络!").then((res: CookBook[]) => {
+
+    const getCookBook = async () => {
+      loading.value = true;
+      //获取数据
+      let res = await dozis.post(Dozurl.getCookBook, store.state.user, "请求失败，请检查网络!");
       dataList.value = [...res];
+      loading.value = false;
+    }
+
+    onMounted(() => {
+      getCookBook();
     })
 
     return {
-      dataList,isEdit,EditSize,data,title,isAdd,cont,het,
-      toEdit,closeEdit,removeDish,addDish,closeAdd,updateFlag,
+      dataList,isEdit,EditSize,data,title,isAdd,cont,het,loading,
+      toEdit,closeEdit,removeDish,addDish,closeAdd,updateFlag,getCookBook
     }
   }
 });
@@ -196,6 +210,12 @@ export default defineComponent({
     //表格外面的div
     #tb {
 
+
+      #cookImg {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+      }
     }
   }
 }
